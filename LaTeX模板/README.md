@@ -4,8 +4,6 @@
 
 ## 使用
 
-在本目录运行 `./build.sh`，或执行：
-
 ```sh
 latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=build main.tex
 ```
