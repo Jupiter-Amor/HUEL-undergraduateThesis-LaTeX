@@ -1,0 +1,147 @@
+% 河南财经政法大学本科毕业论文空白模板（顺序编码制）
+% 所有格式说明写在注释中，不应成为最终论文中的可见文字。
+% 仅替换占位内容；字体、边距、字号、行距等统一由 huelthesis.sty 控制。
+\documentclass[UTF8,fontset=none,scheme=plain,zihao=-4]{ctexart}
+\InputIfFileExists{fonts.tex}{}{}
+\usepackage{huelthesis}
+
+% ===== 封面：题目26bp黑体；“本科生毕业论文”22bp黑体；均不加粗 =====
+% 信息标签14bp宋体，值14bp黑体，右栏底线0.5bp，八行的位置保持原稿。
+% 长题目可以自然折成两行；不要缩小字号以塞入一行。
+\renewcommand{\ThesisTitle}{[在此键入论文题目]}
+\renewcommand{\ThesisAuthor}{[在此键入作者姓名]}
+\renewcommand{\ThesisStudentID}{[在此键入学生学号]}
+\renewcommand{\ThesisMajor}{[在此键入专业名称]}
+\renewcommand{\ThesisClass}{[在此键入学生班级]}
+\renewcommand{\ThesisCollege}{[在此键入学院全称]}
+\renewcommand{\ThesisCommunity}{[在此键入书院社区全称]}
+% 教师姓名和职称中间留一个普通空格，如“张三 教授”。
+\renewcommand{\ThesisSupervisor}{[在此键入指导教师姓名和职称]}
+\renewcommand{\ThesisDate}{[在此键入定稿日期X年X月X日]}
+
+% 默认复刻Word缓存目录的10bp外观；若采用Word说明的“小四12bp”目录，取消下行注释。
+% \ThesisTOCStricttrue
+
+\begin{document}
+\ThesisMakeCover
+\ThesisFrontMatter % 声明至目录大写罗马页码；封面无页码。
+\ThesisMakeDeclarations
+
+% ===== 中文摘要：标题三号16bp宋体加粗；内容小四12bp宋体 =====
+% 内容两端对齐，首行两字，段前后0，1.25倍行距（实际基线19.43bp）。
+% 原稿要求约400字，独立反映主要内容，不把模板说明复制为论文内容。
+\begin{cnabstract}
+[在此填写中文摘要]
+% 关键词3–5个；中文分号分隔，末尾无标点；标签粗体，内容常规。
+% 命令已处理上空一行及续行对齐，不要额外插入\\或空白行。
+\ThesisKeywords{[关键词一]；[关键词二]；[关键词三]}
+\end{cnabstract}
+
+% ===== 英文摘要：16bp Times New Roman粗体标题，12bp常规内容 =====
+% 两端对齐，首行缩进与原稿相同；1.25倍行距；内容须与中文摘要相符。
+\begin{enabstract}
+[Enter the English abstract here]
+% Key Words标签粗体；英文逗号分隔，各组首字母大写，最后不用句点。
+\ThesisEnglishKeywords{[Keyword One], [Keyword Two], [Keyword Three]}
+\end{enabstract}
+
+% ===== 目录：自动生成，只列前三层标题、参考文献、致谢 =====
+% 不收录封面、声明、中英文摘要；不可手工写死页码。更改标题后重新编译。
+\ThesisTableOfContents
+\ThesisMainMatter % 正文重置为阿拉伯页码1。
+
+% ===== 正文 =====
+% 一级16bp宋体粗、居中、前后12bp；各一级连续排版，不强制另起页。
+% 二级12bp宋体粗，首行两字，前后6bp；三级12bp常规，无粗体/斜体。
+% 标题号码使用1、2.1、2.1.1形式，中间圆点，号码和标题末尾不加标点。
+% 所有英文字母、数字（包括标题）使用Times New Roman。
+% 正文12bp宋体常规、1.25倍，两端对齐，首行两字，段前后0。
+% 不用\chapter，不用enumerate充当章节标题，不用\vspace手调正文版式。
+\section{引\ThesisTitleGap 言}
+[在此填写引言]
+
+\section{一级标题}
+[在此填写正文]
+\subsection{二级标题}
+[在此填写正文]
+\subsubsection{三级标题}
+[在此填写正文]
+% 四级及以下手写（1）（2）序号，括号后不能再加顿号。
+% \ThesisItem{1}{[在此填写内容]}
+% \ThesisItem{2}{[在此填写内容]}
+
+\subsection{二级标题}
+% 原Word第二个三级标题的间距与第一个不同；按该处视觉格式调用：
+\ThesisThirdCompactStyle
+\subsubsection{三级标题}
+[在此填写正文]
+
+% ===== 表格插入示例（保持注释，使用时取消；不要将示例当研究数据） =====
+% 正文先提及表，如：结果见\ThesisTableRef{tab:example}。
+% 表体整体居中，表内通常五号10.5bp宋体常规、居中；每章从1重编号。
+% 表号位于上方左边缩进两格，表题上方居中12bp宋体粗，单位在右。
+% 原范例顶底线1.5bp、内部横竖线0.75bp、左右无外框，不能改为普通三线表。
+% 资料来源10.5bp仿宋，以表左边线为起点缩进两格。
+% 参数依次为：[表宽]、{表名}、{单位}、{唯一label}。
+% 没有单位时可将单位参数留空（仍保留“单位：”，与原模板一致）。
+% \begin{thesistable}[149.031mm]{表标题名称}{[单位]}{tab:example}
+%   \begin{tabularx}{\linewidth}{C|C|C|C|C}
+%     \ThesisHeavyRule
+%     [列一] & [列二] & [列三] & [列四] & [列五] \\
+%     \hline
+%     [内容] & [内容] & [内容] & [内容] & [内容] \\
+%     \ThesisHeavyRule
+%   \end{tabularx}
+%   \ThesisTableSource{[真实数据来源]}
+% \end{thesistable}
+% 表列宽按内容调整。与原空表完全同宽时，五列总宽依次为
+% 26.6524/32.7554/32.7554/32.7731/24.0947mm（包含单元格内边距）。
+% 超过一页的表不能放入该整体环境；需单独使用longtable并保留重复表头/表线。
+
+% ===== 图片插入示例 =====
+% 正文先提及图，如：流程见\ThesisFigureRef{fig:example}。
+% 图放在出现处；图题在下，图序和图名12bp宋体粗，中间空两字。
+% 参数依次为{图名}{唯一label}；图片保存于image目录，不截图公式或表格代替原件。
+% 原稿居中段落继承缩进，图中心右偏12bp、图题右偏24bp；包内已复刻。
+% \begin{thesisfigure}{图名}{fig:example}
+%   \includegraphics[width=100mm,keepaspectratio]{[图片文件名].pdf}
+% \end{thesisfigure}
+% 建议单图宽度≤\dimexpr\linewidth-24bp\relax，保留原比例，不拉伸。
+
+% ===== 可编辑公式插入示例 =====
+% 公式居中，编号(2.1)在正文最右端，使用英文半角括号、TNR数字。
+% 每章重编号；用equation/aligned排数学，不能用图片替代。
+% \begin{equation}
+%   a+b+c=d
+%   \label{eq:example}
+% \end{equation}
+% 文中引用：式\eqref{eq:example}。不要手写最终序号。
+
+\section{一级标题}
+[在此填写正文]
+\section{一级标题}
+[在此填写正文]
+\section{一级标题}
+[在此填写正文]
+
+% ===== 引文与参考文献：顺序编码制，上标[n] =====
+% 用\cite{ref:key}引用；bibitem按文中首次引用的先后顺序放置。
+% 至少15篇是原模板规定；仅填真实核验过的资料，不生成虚构文献。
+% 参考文献另起一页；标题16bp宋体粗；条目12bp宋体/TNR，1.25倍。
+% 标点使用英文状态的 . , : ; ( ) [ ]；不使用中文全角标点。
+% 常见著录形式：
+% 图书：作者.书名[M].出版地:出版社,年份.
+% 期刊：作者.文章名[J].刊名,年份,卷(期):起止页码.
+% 报纸：作者.文章名[N].报纸名,yyyy-mm-dd(版次).
+% 网络：作者.文献名[EB/OL].(发布日期)[引用日期].访问路径.
+% 文献类别：[M]图书 [C]会议录 [G]汇编 [N]报纸 [J]期刊 [D]学位论文
+% [R]报告 [S]标准 [P]专利 [DB/OL]在线数据库 [J/OL]在线期刊 [EB/OL]电子公告。
+\begin{thesisreferences}
+\bibitem{ref:placeholder} [在此按首次引用顺序填写真实参考文献]
+\end{thesisreferences}
+
+% ===== 致谢：另起页；标题16bp宋体粗；内容12bp宋体常规，1.25倍 =====
+\begin{thesisacknowledgements}
+[在此填写致谢]
+\end{thesisacknowledgements}
+\end{document}

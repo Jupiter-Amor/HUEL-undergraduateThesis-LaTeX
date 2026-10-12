@@ -1,0 +1,343 @@
+% 河南财经政法大学本科毕业论文模板（顺序编码制）
+% 设计依据：word版/附件8-2：毕业论文模板（顺序编码制）.doc 及用户提供的10页截图。
+% 本文件只定义版式；论文内容在 main.tex 中填写。编译器必须为 XeLaTeX。
+% 单位 bp=Word 的磅（1/72 英寸）；不要随意改成 LaTeX 的 pt。
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{huelthesis}[2026/10/12 HUEL undergraduate thesis]
+\RequirePackage{iftex}
+\ifXeTeX\else\PackageError{huelthesis}{Use XeLaTeX}{Compile this template with XeLaTeX.}\fi
+\RequirePackage{geometry}
+% Word 节属性：纸张11906×16838 twips，边距左右1418、上下1701 twips。
+% 页眉/页脚距边1247 twips；原页脚有两个段落，数字位置见下方独立定义。
+\geometry{paperwidth=595.3bp,paperheight=841.9bp,
+  left=70.9bp,right=70.9bp,top=85.05bp,bottom=85.05bp,
+  headheight=0pt,headsep=0pt,footskip=0pt}
+\RequirePackage{fontspec}
+\RequirePackage{graphicx}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{longtable}
+\RequirePackage{amsmath}
+\RequirePackage{newtxmath}
+\RequirePackage{titlesec}
+\RequirePackage{indentfirst}
+\RequirePackage{tocloft}
+\RequirePackage{tikz}
+\RequirePackage{eso-pic}
+\RequirePackage[super,square,sort&compress]{natbib}
+\RequirePackage[hidelinks,unicode]{hyperref}
+
+% 字体必须与Word相同，禁止静默替换成思源宋体/Fandol/苹方。
+% fonts.tex 可在加载本包前提供 \ThesisSongFont 等宏，值为字体名或文件完整路径。
+% macOS Office 的字体常未注册给Fontconfig，故同时检查原版字体文件。
+\newcommand{\ThesisResolveFont}[3]{%
+  \ifdefined#1\else
+    \IfFileExists{#3}{\def#1{#3}}{%
+      \IfFontExistsTF{#2}{\def#1{#2}}{%
+        \PackageError{huelthesis}{Required font #2 missing}{Set its exact font file in fonts.tex.}%
+        \def#1{#2}}}%
+  \fi}
+\ThesisResolveFont{\ThesisSongFont}{SimSun}{/Applications/Microsoft Word.app/Contents/Resources/DFonts/SimSun.ttf}
+\ThesisResolveFont{\ThesisHeiFont}{SimHei}{/Applications/Microsoft Word.app/Contents/Resources/DFonts/SimHei.ttf}
+\ThesisResolveFont{\ThesisFangFont}{FangSong}{/Applications/Microsoft Word.app/Contents/Resources/DFonts/Fangsong.ttf}
+\ThesisResolveFont{\ThesisDeclFont}{方正小标宋简体}{/Users/wang/Library/Fonts/方正小标宋简体.ttf}
+\ThesisResolveFont{\ThesisLatinFont}{Times New Roman}{/System/Library/Fonts/Supplemental/Times New Roman.ttf}
+\ThesisResolveFont{\ThesisLatinBoldFont}{Times New Roman/B}{/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf}
+\ThesisResolveFont{\ThesisLatinItalicFont}{Times New Roman/I}{/System/Library/Fonts/Supplemental/Times New Roman Italic.ttf}
+\ThesisResolveFont{\ThesisLatinBoldItalicFont}{Times New Roman/BI}{/System/Library/Fonts/Supplemental/Times New Roman Bold Italic.ttf}
+\ThesisResolveFont{\ThesisPageFont}{Arial}{/System/Library/Fonts/Supplemental/Arial.ttf}
+% 宋体没有原生粗体。Word对宋体作合成加粗；此处采用XeTeX合成粗体。
+% 英文粗体/斜体使用Times New Roman的真实字形。
+\setmainfont[NFSSFamily=thesislatin,BoldFont=\ThesisLatinBoldFont,
+  ItalicFont=\ThesisLatinItalicFont,BoldItalicFont=\ThesisLatinBoldItalicFont]{\ThesisLatinFont}
+\setCJKmainfont[NFSSFamily=thesissong,AutoFakeBold=2.17]{\ThesisSongFont}
+\setCJKsansfont[NFSSFamily=thesissans]{\ThesisHeiFont}
+\setCJKfamilyfont{thesishei}[NFSSFamily=thesishei]{\ThesisHeiFont}
+\setCJKfamilyfont{thesisfang}[NFSSFamily=thesisfang]{\ThesisFangFont}
+\setCJKfamilyfont{thesisdecl}[NFSSFamily=thesisdecl]{\ThesisDeclFont}
+\providecommand{\songti}{\CJKfamily{\CJKrmdefault}}
+\newfontfamily\ThesisFooterFont[NFSSFamily=thesisfooter]{\ThesisPageFont}
+\newfontfamily\ThesisSpacedLatin[NFSSFamily=thesisspaced,LetterSpace=-0.833333,
+  BoldFont=\ThesisLatinBoldFont,ItalicFont=\ThesisLatinItalicFont,
+  BoldItalicFont=\ThesisLatinBoldItalicFont]{\ThesisLatinFont}
+% Normal 样式字间距-2 twips=-0.1bp。该设置局限正文，不影响目录/数学/参考文献。
+\newcommand{\ThesisBodySpacing}{%
+  \ThesisSpacedLatin
+  \xeCJKsetup{CJKglue=\hskip -0.1bp plus .05bp minus .05bp,
+    CJKecglue=\hskip .2em plus .1em minus .1em}}
+\newcommand{\ThesisNormalSpacing}{%
+  \rmfamily\xeCJKsetup{CJKglue=\hskip 0pt plus .05bp minus .05bp,
+    CJKecglue=\hskip .2em plus .1em minus .1em}}
+
+% 正文：小四(12bp)宋体、英数TNR、两端对齐、首行两字(24bp)、段前段后0。
+% 1.25倍是Word的字体度量；截图实测基线19.43bp。不要简单\linespread{1.25}，
+% 它会基于LaTeX默认基线再次相乘，产生不同的行距。
+\newcommand{\ThesisBodyFont}{\normalfont\songti\fontsize{12bp}{19.43bp}\selectfont\ThesisBodySpacing}
+\newcommand{\ThesisSmallFont}{\normalfont\songti\fontsize{10.5bp}{16.4bp}\selectfont\ThesisNormalSpacing}
+\renewcommand{\normalsize}{\ThesisBodyFont}
+\AtBeginDocument{\ThesisBodyFont\setlength{\parindent}{24bp}\setlength{\parskip}{0pt}}
+\setlength{\parindent}{24bp}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{1em}
+\raggedbottom
+\pagestyle{empty}
+\graphicspath{{image/}}
+
+% 页码的原版特例：Arial12bp，墨迹顶部约264.34mm，中心右偏24bp。
+% 它来自页脚“居中+首行四字缩进”，并不使用正文的TNR字体。
+\newif\ifThesisPageNumber
+\ThesisPageNumberfalse
+\AddToShipoutPictureFG{%
+  \ifThesisPageNumber
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=base,inner sep=0pt] at
+      ([xshift=321.65bp,yshift=-758.28bp]current page.north west)
+      {\ThesisFooterFont\fontsize{12bp}{12bp}\selectfont\thepage};
+  \end{tikzpicture}%
+  \fi}
+\newcommand{\ThesisFrontMatter}{\clearpage\hypersetup{pageanchor=true}\pagenumbering{Roman}\ThesisPageNumbertrue}
+% 原正文第一页一级标题顶端比通常页首低约7.2bp；负补偿消除TeX空顶行。
+\newcommand{\ThesisMainMatter}{\clearpage\pagenumbering{arabic}\ThesisBodyFont\vspace*{-22.79bp}}
+
+% 标题不用斜体，末尾不加句号/顿号；不要用enumerate列表充当章节标题。
+% 一级：16bp宋体粗、TNR数字粗、居中、单倍基线约20.72bp，Word段前后12bp。
+% TeX标题字框与正文基线的连接额外占约2bp，段后设置10bp作等效补偿。
+% 一级标题连续排版，不用\chapter，不附加\clearpage或空白段落。
+\newcommand{\ThesisFirstFont}{\normalfont\songti\bfseries\fontsize{16bp}{20.72bp}\selectfont}
+\titleformat{\section}[block]{\ThesisFirstFont\centering}{\thesection}{.25em}{}
+\titlespacing{\section}{0pt}{12bp}{10bp}
+% 二级：12bp宋体粗、首行两字、单倍基线15.54bp、段前后6bp。
+\titleformat{\subsection}[block]{\normalfont\songti\bfseries\fontsize{12bp}{15.54bp}\selectfont}{\thesubsection}{.5em}{}
+\titlespacing{\subsection}{24bp}{6bp}{6bp}
+% 三级：12bp宋体常规，序号2.1.1，无粗体/斜体、首行两字。
+% 原doc的2.1.1样例为段前后2.4bp、1.5倍；2.2.1样例却为6bp、单倍。
+% 默认保留前者；需要后一种原样式时仅调用\ThesisThirdCompactStyle。
+\titleformat{\subsubsection}[block]{\normalfont\songti\fontsize{12bp}{23.31bp}\selectfont\ThesisNormalSpacing}{\thesubsubsection}{.5em}{}
+\titlespacing{\subsubsection}{24bp}{2.4bp}{2.4bp}
+\newcommand{\ThesisThirdCompactStyle}{%
+  \titleformat{\subsubsection}[block]{\normalfont\songti\fontsize{12bp}{15.54bp}\selectfont\ThesisNormalSpacing}{\thesubsubsection}{.5em}{}
+  \titlespacing{\subsubsection}{24bp}{6bp}{6bp}}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+% 两个TNR空格加Word自动中英间隔，16bp标题间空约16bp；目录随10bp字号缩放。
+\newcommand{\ThesisTitleGap}{\hspace{1em}}
+% 四级及以下：手写（1）（2），不用顿号；12bp常规，首行两字。
+\newcommand{\ThesisItem}[2]{\par\noindent\hspace*{24bp}（#1）#2\par}
+
+% 摘要/参考文献/致谢标题与一级字体相同，按各页面的原始段距分别设置。
+\newcommand{\ThesisUnnumberedHeading}[1]{%
+  \par\vspace*{-4.8bp}{\ThesisFirstFont\centering #1\par}\vspace{10bp}}
+\newenvironment{cnabstract}{%
+  \clearpage\par\vspace*{-16.8bp}{\ThesisFirstFont\centering 摘\ThesisTitleGap 要\par}\vspace{15.4bp}\ThesisBodyFont}{\par}
+% Abstract原稿没有摘要标题的前后12bp段距；单独保留这一差异。
+\newenvironment{enabstract}{%
+  \clearpage\vspace*{-17.87bp}{\normalfont\bfseries\fontsize{16bp}{20.72bp}\selectfont\centering Abstract\par}\vspace{-1bp}\ThesisBodyFont}{\par}
+\newlength{\ThesisKeywordLabelWidth}
+\newcommand{\ThesisKeywords}[1]{%
+  \par\vspace{19.43bp}\begingroup\ThesisBodyFont
+  \settowidth{\ThesisKeywordLabelWidth}{\bfseries 关键词：}%
+  \noindent\hangindent=\dimexpr24bp+\ThesisKeywordLabelWidth\relax\hangafter=1
+  \hspace*{24bp}{\bfseries 关键词：}#1\par\endgroup}
+\newcommand{\ThesisEnglishKeywords}[1]{%
+  \par\vspace{19.43bp}\begingroup\ThesisBodyFont
+  \settowidth{\ThesisKeywordLabelWidth}{\bfseries Key Words: }%
+  \noindent\hangindent=\dimexpr24bp+\ThesisKeywordLabelWidth\relax\hangafter=1
+  \hspace*{24bp}{\bfseries Key Words: }#1\par\endgroup}
+
+% 目录仅前三层、参考文献和致谢，页码右对齐、点引导线、不粗不斜。
+% 原文件文字说明要求小四12bp，但Word已缓存目录实际约10bp。默认按截图。
+% \ThesisTOCStricttrue 可切到文字说明的12bp/1.25倍；此时不会和缓存外观相同。
+\newif\ifThesisTOCStrict
+\ThesisTOCStrictfalse
+\renewcommand{\contentsname}{目\ThesisTitleGap 录}
+\renewcommand{\cfttoctitlefont}{\hfill\ThesisFirstFont}
+\renewcommand{\cftaftertoctitle}{\hfill}
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{16bp}
+\newcommand{\ThesisTOCFont}{\normalfont\songti\fontsize{10bp}{16.4bp}\selectfont\ThesisNormalSpacing}
+\renewcommand{\cftsecfont}{\ThesisTOCFont}
+\renewcommand{\cftsubsecfont}{\ThesisTOCFont}
+\renewcommand{\cftsubsubsecfont}{\ThesisTOCFont}
+\renewcommand{\cftsecpagefont}{\ThesisTOCFont}
+\renewcommand{\cftsubsecpagefont}{\ThesisTOCFont}
+\renewcommand{\cftsubsubsecpagefont}{\ThesisTOCFont}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftdotsep}{.5}
+\cftsetindents{section}{40bp}{8bp}
+\cftsetindents{subsection}{52bp}{16bp}
+\cftsetindents{subsubsection}{64bp}{24bp}
+\setlength{\cftbeforesecskip}{6bp}
+\setlength{\cftbeforesubsecskip}{0pt}
+\setlength{\cftbeforesubsubsecskip}{0pt}
+\newcommand{\ThesisTableOfContents}{%
+  \clearpage\begingroup
+  \ifThesisTOCStrict
+    \renewcommand{\ThesisTOCFont}{\normalfont\songti\fontsize{12bp}{19.43bp}\selectfont\ThesisNormalSpacing}%
+  \fi
+  \ThesisTOCFont\vspace*{-16.72bp}%
+  {\ThesisFirstFont\centering\contentsname\par}\vspace{9.28bp}%
+  \csname @starttoc\endcsname{toc}\par\endgroup}
+
+% 图表直接在调用处插入，与Word嵌入正文相同；不采用LaTeX默认浮动。
+% 每个图/表和标题/来源作为一个整体，不拆页，放不下则整体移至下一页。
+% 图、表按一级章节重置：图2-1、表2-1；公式单独为(2.1)。
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+\counterwithin{equation}{section}
+\renewcommand{\thefigure}{\thesection-\arabic{figure}}
+\renewcommand{\thetable}{\thesection-\arabic{table}}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+% 图段落继承首行2字、居中→右移12bp；图题继承首行4字→右移24bp。
+% 以下保留原版视觉偏移；给图的实际宽度预留偏移，避免超出页边距。
+\newsavebox{\ThesisFigureBox}
+\newsavebox{\ThesisTableBox}
+\newenvironment{thesisfigure}[2]{%
+  \par\noindent\begin{minipage}{\linewidth}\ThesisNormalSpacing
+  \def\ThesisFigureTitle{#1}\def\ThesisFigureLabel{#2}%
+  \begin{lrbox}{\ThesisFigureBox}%
+}{%
+  \end{lrbox}\noindent\makebox[\linewidth][c]{\hspace*{24bp}\usebox{\ThesisFigureBox}}\par
+  \refstepcounter{figure}\label{\ThesisFigureLabel}%
+  \noindent\hspace*{48bp}\begin{minipage}{\dimexpr\linewidth-48bp\relax}
+    \normalfont\songti\bfseries\fontsize{12bp}{19.43bp}\selectfont\centering
+    图\,\thefigure\hspace{24bp}\ThesisFigureTitle\par
+  \end{minipage}\par
+  \end{minipage}\par}
+\newcommand{\ThesisFigureRef}[1]{图\,\ref{#1}}
+\newcommand{\ThesisTableRef}[1]{表\,\ref{#1}}
+% 表宽可自定；示例宽149.031mm。表号常规12bp，标题粗12bp，单位常规12bp。
+% 表号以表左线为起点缩进两字，单位居右；来源五号仿宋且缩进两字。
+\newenvironment{thesistable}[4][149.031mm]{%
+  \par\begin{lrbox}{\ThesisTableBox}\begin{minipage}{#1}
+  \ThesisNormalSpacing\refstepcounter{table}\label{#4}%
+  \noindent\makebox[\linewidth][l]{\fontsize{12bp}{19.43bp}\selectfont
+    \makebox[0pt][l]{\hspace{24bp}表\,\thetable}%
+    \makebox[\linewidth][c]{\normalfont\songti\bfseries #2}%
+    \makebox[0pt][r]{单位：#3\hspace{24bp}}}\par
+  \ThesisSmallFont\centering
+  \setlength{\tabcolsep}{5.4bp}\setlength{\arrayrulewidth}{.75bp}%
+  \renewcommand{\arraystretch}{1.18}%
+}{\par\end{minipage}\end{lrbox}\noindent\makebox[\linewidth][c]{\usebox{\ThesisTableBox}}\par}
+\newcommand{\ThesisTableSource}[1]{%
+  \par{\raggedright\noindent\normalfont\CJKfamily{thesisfang}\fontsize{10.5bp}{16.4bp}\selectfont
+    \hspace*{21bp}资料来源：#1\par}}
+% 原范例有内部竖线：顶/底1.5bp，行间横线/竖线0.75bp，左右不画外框。
+% 不可擅自用booktabs无竖线三线表替代它。\ThesisHeavyRule用于tabular内。
+\newcommand{\ThesisHeavyRule}{\noalign{\hrule height 1.5bp}}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+
+% 数学保持可编辑。newtxmath提供Times风格符号；英数取真正TNR字形。
+% 数学符号本身在原Word中来自旧Equation编辑器，不能把数学符号全强制为文本字体。
+\DeclareSymbolFont{thesisletters}{TU}{\rmdefault}{m}{it}
+\DeclareSymbolFont{thesisdigits}{TU}{\rmdefault}{m}{n}
+\DeclareSymbolFont{thesissigns}{TU}{\rmdefault}{m}{n}
+\AtBeginDocument{%
+  \count255=`a\loop\ifnum\count255<`z\relax
+    \Umathcode\count255="7 \symthesisletters \count255\advance\count255 by1\repeat
+  \Umathcode`z="7 \symthesisletters `z
+  \count255=`A\loop\ifnum\count255<`Z\relax
+    \Umathcode\count255="7 \symthesisletters \count255\advance\count255 by1\repeat
+  \Umathcode`Z="7 \symthesisletters `Z
+  \count255=`0\loop\ifnum\count255<`9\relax
+    \Umathcode\count255="7 \symthesisdigits \count255\advance\count255 by1\repeat
+  \Umathcode`9="7 \symthesisdigits `9
+  \Umathcode`+="2 \symthesissigns `+
+  \Umathcode`=="3 \symthesissigns `=}
+\makeatletter
+\renewcommand{\tagform@}[1]{\maketag@@@{\normalfont\rmfamily\fontsize{12bp}{19.43bp}\selectfont(#1)}}
+\makeatother
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+
+% 顺序编码制：文中\cite{key}输出上标[n]，文末按首次出现顺序编排。
+% 填充参考文献时必须核对真实来源；不少于15篇是原模板要求，禁止伪造凑数。
+% 条目中文宋体12bp、英数TNR12bp、基线19.43bp、英文半角标点、无额外段间距。
+\renewcommand{\bibsection}{\ThesisUnnumberedHeading{参考文献}\phantomsection\addcontentsline{toc}{section}{参考文献}}
+\setlength{\bibsep}{0pt}
+\setlength{\bibhang}{18bp}
+\makeatletter
+% 数字制natbib不使用bibhang；显式保留Word首行左齐、续行悬挂1.5字。
+\renewcommand\NAT@bibsetnum[1]{%
+  \setlength{\leftmargin}{18bp}\setlength{\itemindent}{-18bp}%
+  \setlength{\labelwidth}{0pt}\setlength{\labelsep}{0pt}%
+  \setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}%
+  \setlength{\topsep}{0pt}\setlength{\partopsep}{0pt}%
+  \renewcommand{\makelabel}[1]{##1}}
+\makeatother
+\renewcommand{\bibfont}{\normalfont\songti\fontsize{12bp}{19.43bp}\selectfont\ThesisNormalSpacing}
+\newenvironment{thesisreferences}{\clearpage\begin{thebibliography}{99}}{\end{thebibliography}}
+\newenvironment{thesisacknowledgements}{%
+  \clearpage\phantomsection\addcontentsline{toc}{section}{致\ThesisTitleGap 谢}%
+  \vspace*{-16.91bp}{\ThesisFirstFont\centering 致\ThesisTitleGap 谢\par}\vspace{3.4bp}\ThesisBodyFont}{\par}
+
+% 封面信息：只改值，不改版式。教师姓名与职称之间留一个空格。
+\newcommand{\ThesisTitle}{[在此处键入论文题目]}
+\newcommand{\ThesisAuthor}{[在此键入作者姓名]}
+\newcommand{\ThesisStudentID}{[在此键入学生学号]}
+\newcommand{\ThesisMajor}{[在此键入专业名称]}
+\newcommand{\ThesisClass}{[在此键入学生班级]}
+\newcommand{\ThesisCollege}{[在此键入学院全称]}
+\newcommand{\ThesisCommunity}{[在此键入书院社区全称]}
+\newcommand{\ThesisSupervisor}{[在此键入指导教师姓名和职称]}
+\newcommand{\ThesisDate}{[在此键入定稿日期X年X月X日]}
+% 绝对位置仅用于原稿固定的封面和声明，不用于正文。
+\newcommand{\ThesisAtBase}[3]{%
+  \node[anchor=base,inner sep=0pt] at
+    ([xshift=#1,yshift=-#2]current page.north west){#3};}
+\newcommand{\ThesisCoverRow}[3]{%
+  \node[anchor=base west,inner sep=0pt] at
+    ([xshift=54.16mm,yshift=-#1]current page.north west)
+    {\normalfont\songti\fontsize{14bp}{18.13bp}\selectfont\makebox[20.108mm][s]{#2}};%
+  \ThesisAtBase{116.954mm}{#1}{\normalfont\CJKfamily{thesishei}\fontsize{14bp}{18.13bp}\selectfont #3}%
+  \draw[line width=.5bp] ([xshift=76.174mm,yshift=-#1-1.0mm]current page.north west)
+    -- ([xshift=157.754mm,yshift=-#1-1.0mm]current page.north west);}
+\newcommand{\ThesisMakeCover}{%
+  \ThesisPageNumberfalse\hypersetup{pageanchor=false}\thispagestyle{empty}\null
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north west,inner sep=0pt] at
+      ([xshift=26.423mm,yshift=-25.35mm]current page.north west)
+      {\includegraphics[width=24.024mm,height=24.589mm,
+        % 原PNG为96dpi，裁剪像素必须乘72/96换算为bp。
+        trim=746.10744bp 347.37498bp 743.868bp 345.7545bp,clip]{校徽原图.png}};
+    \node[anchor=north,inner sep=0pt] at
+      ([xshift=297.65bp,yshift=-62.1mm]current page.north west)
+      {\includegraphics[width=118.128mm,height=17.198mm]{校名原图.jpg}};
+    \ThesisAtBase{297.65bp}{93.15mm}{\normalfont\CJKfamily{thesishei}\fontsize{22bp}{28.49bp}\selectfont 本科生毕业论文}%
+    \ThesisAtBase{297.65bp}{111.05mm}{\normalfont\CJKfamily{thesishei}\fontsize{26bp}{33.67bp}\selectfont
+      \begin{minipage}[t]{145mm}\centering\ThesisTitle\end{minipage}}%
+    \ThesisCoverRow{166.7mm}{姓\hfill 名}{\ThesisAuthor}
+    \ThesisCoverRow{176.86mm}{学\hfill 号}{\ThesisStudentID}
+    \ThesisCoverRow{187.02mm}{专\hfill 业}{\ThesisMajor}
+    \ThesisCoverRow{197.18mm}{班\hfill 级}{\ThesisClass}
+    \ThesisCoverRow{207.34mm}{学\hfill 院}{\ThesisCollege}
+    \ThesisCoverRow{217.50mm}{书院社区}{\ThesisCommunity}
+    \ThesisCoverRow{227.66mm}{指导教师}{\ThesisSupervisor}
+    \ThesisCoverRow{237.82mm}{完成时间}{\ThesisDate}
+  \end{tikzpicture}\clearpage}
+
+% 声明固定原文应保留，签名/日期空栏用于手签，不自动生成任何人的签名。
+% 标题方正小标宋简体16bp，不额外加粗；正文宋体14bp、1.5倍(27.34bp)。
+\newcommand{\ThesisDeclarationText}[2]{%
+  \node[anchor=base west,inner sep=0pt] at
+    ([xshift=70.9bp,yshift=-#1]current page.north west)
+    {\begin{minipage}[t]{\textwidth}\normalfont\songti\fontsize{14bp}{27.34bp}\selectfont
+      \ThesisNormalSpacing\setlength{\parindent}{28bp}\setlength{\parskip}{0pt}#2\par\end{minipage}};}
+\newcommand{\ThesisSignature}[2]{%
+  \node[anchor=base west,inner sep=0pt] at
+    ([xshift=126.34mm,yshift=-#1]current page.north west)
+    {\normalfont\songti\fontsize{14bp}{27.34bp}\selectfont #2};}
+\newcommand{\ThesisMakeDeclarations}{%
+  \null\begin{tikzpicture}[remember picture,overlay]
+    \ThesisAtBase{297.65bp}{44.5mm}{\normalfont\CJKfamily{thesisdecl}\fontsize{16bp}{31.08bp}\selectfont 毕业论文（设计）独创性声明}%
+    \ThesisDeclarationText{56.24mm}{本人郑重声明：所呈交的毕业论文（设计）是本人在指导教师的指导下，独立进行研究取得的成果。除文中已经注明引用的内容外，本论文不包含其他个人或集体已经发表或撰写的研究成果，也不包含为获得河南财经政法大学或其他教育机构的学位或证书所使用过的材料。因本文引起的法律后果完全由本人承担。}
+    \ThesisSignature{121.50mm}{签名：}
+    \ThesisSignature{131.15mm}{日期：}
+    \ThesisAtBase{297.65bp}{167.55mm}{\normalfont\CJKfamily{thesisdecl}\fontsize{16bp}{31.08bp}\selectfont 毕业论文（设计）使用授权声明}%
+    \ThesisDeclarationText{179.27mm}{本人完全了解河南财经政法大学有关使用毕业论文（设计）的规定，即：学校有权保留所送交的毕业论文（设计），允许毕业论文（设计）被查询和借阅；可以公布毕业论文（设计）内容及可采用影印、缩印或其他复制手段保存毕业论文（设计）。}
+    \ThesisSignature{234.85mm}{学生签名：}
+    \ThesisSignature{244.50mm}{导师签名：}
+    \ThesisSignature{254.15mm}{日\hspace{14bp}期：}
+  \end{tikzpicture}\clearpage}
+\endinput
